@@ -13,11 +13,11 @@ data "aws_iam_instance_profile" "my_ssm_profile" {
 }
 
 # Web server (public) ----------------------------
-module "web_server" {
+module "web" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 6.0"
 
-  name                    = "devops-web-server"
+  name                    = "web-server"
   ami                     = data.aws_ami.my_ami.id
   instance_type           = "t3.micro"
   subnet_id               = module.my_vpc.public_subnets[0]
@@ -27,21 +27,21 @@ module "web_server" {
   iam_instance_profile    = data.aws_iam_instance_profile.my_ssm_profile.name
 
   user_data = templatefile("userdata.sh", {})
-  tags      = { Name = "devops-web-server" }
+  tags      = { Name = "web-server" }
 }
 
-resource "aws_eip" "web_eip" {
+resource "aws_eip" "web" {
   domain   = "vpc"
-  instance = module.web_server.id
-  tags     = { Name = "devops-web-eip" }
+  instance = module.web.id
+  tags     = { Name = "web-server-eip" }
 }
 
 # Ansible controller (private) ----------------------------
-module "controller_server" {
+module "controller" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 6.0"
 
-  name                    = "devops-ansible-controller"
+  name                    = "ansible-controller"
   ami                     = data.aws_ami.my_ami.id
   instance_type           = "t3.micro"
   subnet_id               = module.my_vpc.private_subnets[0]
@@ -51,15 +51,15 @@ module "controller_server" {
   iam_instance_profile    = data.aws_iam_instance_profile.my_ssm_profile.name
 
   user_data = templatefile("userdata.sh", {})
-  tags      = { Name = "devops-ansible-controller" }
+  tags      = { Name = "ansible-controller" }
 }
 
 # Monitoring server (private) ----------------------------
-module "monitoring_server" {
+module "monitoring" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 6.0"
 
-  name                    = "devops-monitoring-server"
+  name                    = "monitoring-server"
   ami                     = data.aws_ami.my_ami.id
   instance_type           = "t3.micro"
   subnet_id               = module.my_vpc.private_subnets[0]
@@ -69,5 +69,5 @@ module "monitoring_server" {
   iam_instance_profile    = data.aws_iam_instance_profile.my_ssm_profile.name
 
   user_data = templatefile("userdata.sh", {})
-  tags      = { Name = "devops-monitoring-server" }
+  tags      = { Name = "monitoring-server" }
 }
