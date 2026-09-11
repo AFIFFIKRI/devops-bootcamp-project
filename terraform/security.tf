@@ -14,13 +14,13 @@ module "public_sg" {
       to_port     = 80
     }
     node_exporter = {
-      cidr_ipv4   = "10.0.0.136/32"   # monitoring server
+      cidr_ipv4   = "10.0.0.136/32" # monitoring server
       ip_protocol = "tcp"
       from_port   = 9100
       to_port     = 9100
     }
     ssh = {
-      cidr_ipv4   = "10.0.0.0/24"     # public VPC subnet
+      cidr_ipv4   = "10.0.0.0/24" # public VPC subnet
       ip_protocol = "tcp"
       from_port   = 22
       to_port     = 22
@@ -44,7 +44,7 @@ module "private_sg" {
 
   ingress_rules = {
     ssh = {
-      cidr_ipv4   = "10.0.0.0/24"     # private VPC subnet
+      cidr_ipv4   = "10.0.0.0/24" # private VPC subnet
       ip_protocol = "tcp"
       from_port   = 22
       to_port     = 22

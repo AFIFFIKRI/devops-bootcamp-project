@@ -1,5 +1,5 @@
 output "web_server_public_ip" {
-  value = aws_eip.web.public_ip   # also renamed from web_eip → web
+  value = aws_eip.web.public_ip # also renamed from web_eip → web
 }
 
 output "ssm_command_web" {

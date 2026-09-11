@@ -7,15 +7,15 @@ module "my_vpc" {
   azs  = ["ap-southeast-1a"]
 
   # subnet value
-  public_subnets  = ["10.0.0.0/25"]     
-  private_subnets = ["10.0.0.128/25"]  
+  public_subnets  = ["10.0.0.0/25"]
+  private_subnets = ["10.0.0.128/25"]
 
   # tags subnet
   public_subnet_tags  = { Name = "devops-public-subnet" }
   private_subnet_tags = { Name = "devops-private-subnet" }
 
   # tags internet and nat gateway
-  igw_tags = { Name = "devops-igw" }
+  igw_tags         = { Name = "devops-igw" }
   nat_gateway_tags = { Name = "devops-ngw" }
 
   # tags route table
