@@ -1,0 +1,25 @@
+---
+- name: Create monitoring config directory
+  file:
+    path: /opt/monitoring
+    state: directory
+
+- name: Copy prometheus.yml
+  template:
+    src: prometheus.yml.j2
+    dest: /opt/monitoring/prometheus.yml
+
+- name: Copy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/monitoring/docker-compose.yml
+
+- name: Install docker-compose plugin
+  apt:
+    name: docker-compose-plugin
+    state: present
+
+- name: Start monitoring stack
+  community.docker.docker_compose_v2:
+    project_src: /opt/monitoring
+    state: present
