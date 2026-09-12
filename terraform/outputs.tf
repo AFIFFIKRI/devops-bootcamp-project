@@ -21,3 +21,8 @@ output "monitoring_private_ip" {
 output "ssm_command_monitoring" {
   value = "aws ssm start-session --target ${module.monitoring.id}"
 }
+
+output "ansible_private_key" {
+  value     = tls_private_key.ansible_key.private_key_pem
+  sensitive = true
+}
