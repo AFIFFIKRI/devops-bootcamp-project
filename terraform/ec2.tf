@@ -12,6 +12,16 @@ data "aws_iam_instance_profile" "my_ssm_profile" {
   name = "EC2-SSM-Role"
 }
 
+resource "tls_private_key" "ansible_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "ansible_key" {
+  key_name   = "devops-ansible-key"
+  public_key = tls_private_key.ansible_key.public_key_openssh
+}
+
 # Web server (public) ----------------------------
 module "web" {
   source  = "terraform-aws-modules/ec2-instance/aws"
@@ -25,6 +35,7 @@ module "web" {
   create_security_group  = false
   vpc_security_group_ids = [module.public_sg.id]
   iam_instance_profile   = data.aws_iam_instance_profile.my_ssm_profile.name
+  key_name               = aws_key_pair.ansible_key.key_name
 
   user_data = templatefile("userdata.sh", {})
   tags      = { Name = "web-server" }
@@ -49,6 +60,7 @@ module "controller" {
   create_security_group  = false
   vpc_security_group_ids = [module.private_sg.id]
   iam_instance_profile   = data.aws_iam_instance_profile.my_ssm_profile.name
+  key_name               = aws_key_pair.ansible_key.key_name
 
   user_data = templatefile("userdata.sh", {})
   tags      = { Name = "ansible-controller" }
@@ -67,6 +79,7 @@ module "monitoring" {
   create_security_group  = false
   vpc_security_group_ids = [module.private_sg.id]
   iam_instance_profile   = data.aws_iam_instance_profile.my_ssm_profile.name
+  key_name               = aws_key_pair.ansible_key.key_name
 
   user_data = templatefile("userdata.sh", {})
   tags      = { Name = "monitoring-server" }

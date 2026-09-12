@@ -1,0 +1,20 @@
+---
+- name: Log in to ECR
+  shell: >
+    aws ecr get-login-password --region ap-southeast-1 |
+    docker login --username AWS --password-stdin {{ ecr_registry }}
+  changed_when: false
+
+- name: Pull app image from ECR
+  community.docker.docker_image:
+    name: "{{ ecr_repository_url }}:latest"
+    source: pull
+
+- name: Run app container
+  community.docker.docker_container:
+    name: web-app
+    image: "{{ ecr_repository_url }}:latest"
+    state: started
+    restart_policy: always
+    ports:
+      - "80:80"

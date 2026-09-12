@@ -1,0 +1,1 @@
+tunnel_token: "{{ lookup('amazon.aws.aws_ssm_parameter_store', '/devops-bootcamp-project/tunnel-token', region='ap-southeast-1') }}"
