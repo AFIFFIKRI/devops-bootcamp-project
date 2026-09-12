@@ -1,0 +1,15 @@
+---
+- name: Configure web server
+  hosts: web
+  become: true
+  roles:
+    - geerlingguy.docker
+    - web_app
+    - node_exporter
+
+- name: Configure monitoring server
+  hosts: monitoring
+  become: true
+  roles:
+    - geerlingguy.docker
+    - monitoring
