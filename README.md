@@ -22,10 +22,12 @@ A full-stack DevOps pipeline: infrastructure provisioned with Terraform, configu
 - **Cloudflare Tunnel** — exposes Grafana without opening any inbound ports
 
 ## 📁 Repo Structure
-app/ # application source (Vite + Three.js)
-terraform/ # infrastructure as code
-ansible/ # configuration management
 
+```
+app/            # application source (Vite + Three.js)
+terraform/      # infrastructure as code
+ansible/        # configuration management
+```
 
 ## 🚀 Setup
 
